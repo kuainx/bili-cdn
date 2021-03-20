@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         bili cdn change
-// @version      0.2.2
+// @version      0.2.3
 // @description  切换bilivideo 镜像 cdn 为原生cdn
 // @author       kuai
 // @match        https://www.bilibili.com/*
@@ -28,13 +28,15 @@
 			console.log(`%c unable to deal ${node}`, "background-color:#00ffff");
 			//无法抓取到该链接
 		}
+		setBuffer();
+		return this.origin_open(method, nurl, async === undefined ? true : async, user, password);
+	};
+	const setBuffer = async () => {
 		if (window.dashPlayer) {
 			if (dashPlayer.getStableBufferTime() !== 300) {
 				dashPlayer.setStableBufferTime(300);
 				console.log(`%c set buffer time`, "background-color:#ff0000");
 			}
 		}
-		return this.origin_open(method, nurl, async === undefined ? true : async, user, password);
 	};
-
 })();
