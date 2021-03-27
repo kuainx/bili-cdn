@@ -1,15 +1,12 @@
 // ==UserScript==
 // @name         bili cdn change
-// @version      0.3.2
+// @version      0.4.0
 // @description  切换bilivideo 劣质cdn 为 优质cdn
 // @author       kuai
 // @match        https://www.bilibili.com/*
 // @grant        none
 // ==/UserScript==
-/*
-possible bad cdn
-cn-sh-fx-bcache-09
- */
+
 (function () {
 	"use strict";
 	let requestedDomain = {
@@ -22,14 +19,10 @@ cn-sh-fx-bcache-09
 	const goodCdn = [
 		"upos-sz-mirrorkodo",
 	];
-	for (let i = 1; i <= 8; i++) {
+	for (let i = 1; i <= 10; i++) {
 		goodCdn.push("cn-sh-fx-bcache-" + String(i).padStart(2, "0"));
 	}
-	goodCdn.push("cn-sh-fx-bcache-10");
-	for (let i = 1; i <= 6; i++) {
-		goodCdn.push("cn-sh-cc-bcache-" + String(i).padStart(2, "0"));
-	}
-	for (let i = 8; i <= 14; i++) {
+	for (let i = 1; i <= 14; i++) {
 		goodCdn.push("cn-sh-cc-bcache-" + String(i).padStart(2, "0"));
 	}
 
@@ -41,6 +34,7 @@ cn-sh-fx-bcache-09
 			}
 		}
 	};
+
 	const putRequestedDomain = async (domain, from, nNode) => {
 		switch (from) {
 			case "bilivideoGoodNode":
@@ -70,9 +64,16 @@ cn-sh-fx-bcache-09
 			if (goodCdn.includes(node)) {
 				putRequestedDomain(node, "bilivideoGoodNode");
 			} else {
-				let nNode = goodCdn[Math.floor(Math.random() * goodCdn.length)];
+				let nNode;
+				if (requestedDomain.bilivideoGoodNode.size) {
+					const goodNodeList = Array.from(requestedDomain.bilivideoGoodNode);
+					nNode = goodNodeList[0];
+					putRequestedDomain(nNode, "bilivideoGoodNode");
+				} else {
+					nNode = goodCdn[Math.floor(Math.random() * goodCdn.length)];
+					putRequestedDomain(node, "bilivideoBadNode", nNode);
+				}
 				nUrl = url.replace(/^https:\/\/[a-z.-\d]*bilivideo.com/i, "https://" + nNode + ".bilivideo.com");
-				putRequestedDomain(node, "bilivideoBadNode", nNode);
 			}
 			setBuffer();
 		} else {
