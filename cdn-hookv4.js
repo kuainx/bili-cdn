@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         bili cdn change
+// @name         bili cdn change v4
 // @version      0.4.0
 // @description  切换bilivideo 劣质cdn 为 优质cdn
 // @author       kuai
@@ -28,8 +28,8 @@
 
 	const setBuffer = async () => {
 		if (window.dashPlayer) {
-			if (window.dashPlayer.getStableBufferTime() !== 300) {
-				window.dashPlayer.setStableBufferTime(300);
+			if (window.dashPlayer.getStableBufferTime() !== 250) {
+				window.dashPlayer.setStableBufferTime(250);
 				console.log(`%c set buffer time`, "background-color:#ff0000");
 			}
 		}

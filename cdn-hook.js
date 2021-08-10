@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         bili cdn change
+// @name         bili cdn change v3
 // @version      0.3.2
 // @description  切换bilivideo 劣质cdn 为 优质cdn
 // @author       kuai
