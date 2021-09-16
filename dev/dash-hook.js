@@ -8,20 +8,23 @@
 // ==/UserScript==
 
 (function () {
-	"use strict";
-	const setBuffer = async () => {
-		if (window.dashPlayer) {
-			console.log(window.dashPlayer);
-		}
-	};
-
-	XMLHttpRequest.prototype.origin_open = XMLHttpRequest.prototype.open;
-	XMLHttpRequest.prototype.open = function (method, url, async, user, password) {
-		let nUrl = url;
-		if (/^https:\/\/[a-z.-\d]*bilivideo.com/i.test(url)) {
-			setBuffer();
-		}
-		return this.origin_open(method, nUrl, async === undefined ? true : async, user, password);
-	};
-
+  "use strict";
+  const DashHook = async () => {
+    if (window.DashPlayer) {
+      console.log("DASH hook", window.DashPlayer);
+      const origin_Dash = {}
+      for (const key in window.DashPlayer.prototype) {
+        const element = window.DashPlayer.prototype[key];
+        origin_Dash[key] = element;
+        window.DashPlayer.prototype[key] = function () {
+          console.log('DASH HOOK', key);
+          return origin_Dash[key].apply(this, arguments);
+        }
+        console.log("DASH proto", key);
+      }
+    } else {
+      setTimeout(DashHook, 1000)
+    }
+  };
+  DashHook()
 })();
